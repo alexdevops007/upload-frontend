@@ -40,7 +40,7 @@ export default {
       formData.append('file', this.file);
 
       try {
-        await axios.post('https://upload-backend.vercel.app/upload', formData, {
+        await axios.post('https://upload-backend-teal.vercel.app/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
