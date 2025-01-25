@@ -1,13 +1,25 @@
 <template>
   <div class="home">
-    <h1>Bienvenue dans l'Application de Gestion de Documents</h1>
-    <p>Utilisez le menu de navigation pour uploader et visualiser vos documents.</p>
+    <h1>Demande de Permis d'Exploitation</h1>
+    <nav>
+      <router-link to="/upload">Télécharger un Document</router-link>
+      |
+      <router-link to="/documents">Voir les Documents</router-link>
+    </nav>
   </div>
 </template>
 
+<script>
+export default {
+  name: 'HomeView',
+};
+</script>
+
 <style scoped>
-.home {
-  text-align: center;
-  margin-top: 50px;
+nav {
+  margin-top: 20px;
+}
+a {
+  margin: 0 10px;
 }
 </style>

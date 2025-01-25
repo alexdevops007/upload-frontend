@@ -1,38 +1,41 @@
 <template>
-  <div>
-    <h2>Uploader un document</h2>
-    <input type="file" @change="handleFileUpload" />
-    <button @click="uploadFile">Uploader</button>
-    <p v-if="error">{{ error }}</p>
-    <p v-if="success">{{ success }}</p>
+  <div class="upload">
+    <h2>Télécharger un Document</h2>
+    <form @submit.prevent="handleUpload">
+      <input type="file" @change="onFileChange" />
+      <button type="submit">Télécharger</button>
+    </form>
+    <p v-if="message" :class="{'error': isError, 'success': !isError}">
+      {{ message }}
+    </p>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
       file: null,
-      error: '',
-      success: '',
+      message: '',
+      isError: false,
     };
   },
   methods: {
-    handleFileUpload(event) {
+    onFileChange(event) {
       const selectedFile = event.target.files[0];
-      if (selectedFile && selectedFile.size > 8 * 1024 * 1024) { // 8 Mo
-        this.error = 'La taille du fichier ne doit pas dépasser 8 Mo.';
+      if (selectedFile && selectedFile.size > 8 * 1024 * 1024) {
+        this.message = 'La taille du fichier dépasse 8MB.';
+        this.isError = true;
         this.file = null;
       } else {
-        this.error = '';
         this.file = selectedFile;
+        this.message = '';
       }
     },
-    async uploadFile() {
+    async handleUpload() {
       if (!this.file) {
-        this.error = 'Veuillez sélectionner un fichier.';
+        this.message = 'Veuillez sélectionner un fichier.';
+        this.isError = true;
         return;
       }
 
@@ -40,22 +43,35 @@ export default {
       formData.append('file', this.file);
 
       try {
-        await axios.post('https://upload-backend-teal.vercel.app/upload', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+        const response = await fetch(`upload-backend-2unt.onrender.com/api/documents/upload`, {
+          method: 'POST',
+          body: formData,
         });
-        this.success = 'Fichier uploadé avec succès!';
-        this.file = null;
-        this.$emit('fileUploaded');
-      } catch (err) {
-        if (err.response && err.response.data && err.response.data.message) {
-          this.error = err.response.data.message;
+
+        const data = await response.json();
+
+        if (response.ok) {
+          this.message = data.message;
+          this.isError = false;
+          this.file = null;
         } else {
-          this.error = 'Erreur lors de l\'upload du fichier.';
+          this.message = data.message || 'Erreur lors du téléchargement.';
+          this.isError = true;
         }
+      } catch (error) {
+        this.message = 'Erreur de connexion au serveur.';
+        this.isError = true;
       }
     },
   },
 };
 </script>
+
+<style scoped>
+.error {
+  color: red;
+}
+.success {
+  color: green;
+}
+</style>
