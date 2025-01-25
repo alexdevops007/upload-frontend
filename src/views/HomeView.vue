@@ -1,18 +1,13 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>Bienvenue dans l'Application de Gestion de Documents</h1>
+    <p>Utilisez le menu de navigation pour uploader et visualiser vos documents.</p>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
+<style scoped>
+.home {
+  text-align: center;
+  margin-top: 50px;
 }
-</script>
+</style>
