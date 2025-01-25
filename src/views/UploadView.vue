@@ -43,7 +43,7 @@ export default {
       formData.append('file', this.file);
 
       try {
-        const response = await fetch(`upload-backend-2unt.onrender.com/api/documents/upload`, {
+        const response = await fetch(`https://upload-backend-2unt.onrender.com/api/documents/upload`, {
           method: 'POST',
           body: formData,
         });
